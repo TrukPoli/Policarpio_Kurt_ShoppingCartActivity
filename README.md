@@ -1,6 +1,5 @@
 # Shopping Cart System (C# Console App)
 
-  Project Description
 This project is a console-based shopping cart system written in C#. It allows users to select products, add them to a cart, compute totals, apply discounts, and view updated stock after checkout.
 
  Features
