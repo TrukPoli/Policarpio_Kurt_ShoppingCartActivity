@@ -12,7 +12,7 @@ This project is a console-based shopping cart system written in C#. It allows us
 - 10% discount for ₱5000 and above
 - Updated inventory display
 
-  How the Program Works
+How the Program Works
 1. Displays product menu
 2. User selects product and quantity
 3. System validates input and stock
