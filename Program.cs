@@ -33,6 +33,6 @@ class Program
             products[i].DisplayProduct();
         }
 
-        Console.WriteLine("\nProgram End (Commit 1 Version)");
+        Console.WriteLine("\nProgram End");
     }
 }
