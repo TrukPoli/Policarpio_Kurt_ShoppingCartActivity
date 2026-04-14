@@ -1,3 +1,4 @@
+//Initial setup with Product class and menu display
 using System;
 
 class Product
