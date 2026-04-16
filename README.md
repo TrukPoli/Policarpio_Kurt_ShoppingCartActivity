@@ -23,6 +23,7 @@ How the Program Works
 8. Discount is applied if applicable
 
 AI Prompt Utilization
+
 I used AI (ChatGPT) as a guide to better understand the activity
 Helped clarify how the shopping cart system works
 
