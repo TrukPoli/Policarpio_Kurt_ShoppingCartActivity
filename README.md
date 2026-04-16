@@ -24,8 +24,7 @@ How the Program Works
 
 AI Prompt Utilization
 
-I used AI (ChatGPT) as a guide to better understand the activity
-Helped clarify how the shopping cart system works
+I used AI (ChatGPT) as a guide to better understand the activity and helped me clarify on how the shopping cart system works.
 
 - Explain a shopping cart system in C# in the simplest way
 - How do I validate user input using int.TryParse in C#?
