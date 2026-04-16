@@ -40,9 +40,7 @@ class Program
     static void Main(string[] args)
     {
         Product[] products = new Product[]
-
         {
-   
             new Product { Id = 1, Name = "Toyota Vios", Price = 900000, RemainingStock = 3 },
             new Product { Id = 2, Name = "Honda Civic", Price = 1200000, RemainingStock = 2 },
             new Product { Id = 3, Name = "Ford Ranger", Price = 1500000, RemainingStock = 2 },
@@ -79,7 +77,7 @@ class Program
             {
                 Console.Write("Invalid input. Enter quantity: ");
             }
-            
+
             Product selectedProduct = null;
 
             for (int i = 0; i < products.Length; i++)
@@ -152,7 +150,7 @@ class Program
                 break;
             }
         }
-
+        
         Console.WriteLine("\n=== RECEIPT ===");
 
         double grandTotal = 0;
@@ -181,3 +179,5 @@ class Program
         {
             products[i].DisplayProduct();
         }
+    }
+}
