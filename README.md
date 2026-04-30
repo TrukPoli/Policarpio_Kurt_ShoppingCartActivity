@@ -1,34 +1,6 @@
 # Shopping Cart System (C# Console App)
 
-This project is a console-based shopping cart system written in C#. It allows users to select products, add them to a cart, compute totals, apply discounts, and view updated stock after checkout.
-
- Features
-- Product menu display
-- Stock validation
-- Input validation using TryParse
-- Shopping cart with duplicate handling
-- Automatic stock deduction
-- Receipt generation
-- 10% discount for ₱5000 and above
-- Updated inventory display
-
-How the Program Works
-1. Displays product menu
-2. User selects product and quantity
-3. System validates input and stock
-4. Item is added/updated in cart
-5. Stock is updated
-6. User continues shopping or checks out
-7. System prints receipt and final total
-8. Discount is applied if applicable
+The first task of this part is addressing the comments and revise the utilization of AI and specify it as detailed on README.md. and the next part is more on enhancement features such as the user can manage their cart before checking out it, browse the product, categorize the product, validate payment, generate a receipt with receipt number and date/time, show low-stock alerts, and keep an order history during the program run.
 
 AI Prompt Utilization
 
-I used AI (ChatGPT) as a guide to better understand the activity and helped me clarify on how the shopping cart system works.
-
-- Explain a shopping cart system in C# in the simplest way
-- How do I validate user input using int.TryParse in C#?
-- How to check if stock is enough before buying?
-- How to apply a discount if total is greater than a certain amount?
-- How to prevent duplicate items in a cart using arrays?
-- Can you show me a simple flowchart for a shopping cart system?
