@@ -79,7 +79,6 @@ class Program
         bool isShopping = true;
         while (isShopping)
         {
-            // Product Search
             Console.Write("\nEnter car name to search (or press Enter to see all): ");
             string search = Console.ReadLine().ToLower();
 
@@ -116,7 +115,6 @@ class Program
                 else Console.WriteLine("Car not found or out of stock.");
             }
 
-            // Better Continue Prompt Validation
             while (true)
             {
                 Console.Write("\nAdd another item? (Y/N): ");
@@ -137,7 +135,6 @@ class Program
     {
         if (cart.Count == 0) { Console.WriteLine("\nYour cart is empty."); return; }
 
-        // Cart Management
         Console.WriteLine("\n--- YOUR CART ---");
         for (int i = 0; i < cart.Count; i++)
         {
@@ -150,19 +147,31 @@ class Program
 
         if (opt == "R")
         {
-            Console.Write("Enter item number to remove: ");
-            if (int.TryParse(Console.ReadLine(), out int idx) && idx > 0 && idx <= cart.Count)
+            Console.Write("Enter item number to remove at your cart: ");
+            string input = Console.ReadLine();
+            
+            // Logic updated to provide feedback on invalid input
+            if (int.TryParse(input, out int idx) && idx > 0 && idx <= cart.Count)
             {
                 cart[idx - 1].Product.Restock(cart[idx - 1].Quantity);
                 cart.RemoveAt(idx - 1);
-                Console.WriteLine("Item removed and stock returned.");
+                Console.WriteLine("Item has been removed to your cart and stock returned.");
             }
+            else
+            {
+                Console.WriteLine($"\n[Invalid Input]: There's no item number'{input}' in your cart.");
+                Console.WriteLine($"Please choose a number between 1 and {cart.Count}.");
+            }
+            
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
         else if (opt == "C")
         {
             foreach (var item in cart) item.Product.Restock(item.Quantity);
             cart.Clear();
             Console.WriteLine("Cart cleared and all stock returned.");
+            Console.ReadKey();
         }
     }
 
@@ -179,7 +188,6 @@ class Program
         Console.WriteLine($"Discount (10%): -₱{discount}");
         Console.WriteLine($"Final Total: ₱{finalTotal}");
 
-        // Checkout Payment Validation
         double payment = 0;
         while (payment < finalTotal)
         {
@@ -190,7 +198,6 @@ class Program
             }
         }
 
-        // Receipt Number and Date
         string rNo = receiptCounter.ToString("D4");
         Console.WriteLine("\n========================================");
         Console.WriteLine("           OFFICIAL RECEIPT             ");
@@ -206,7 +213,6 @@ class Program
         Console.WriteLine($"Change:      ₱{payment - finalTotal}");
         Console.WriteLine("========================================");
 
-        // Order History
         orderHistory.Add(new Order { 
             ReceiptNumber = rNo, 
             OrderDate = DateTime.Now, 
@@ -216,7 +222,6 @@ class Program
         receiptCounter++;
         cart.Clear();
 
-        // Stock Reorder Alert
         Console.WriteLine("\n--- INVENTORY STATUS ---");
         bool lowStockFound = false;
         foreach (var p in products)
@@ -232,7 +237,6 @@ class Program
 
     static void ViewHistory()
     {
-        // Order History Receipt
         Console.WriteLine("\n=== COMPLETED TRANSACTIONS ===");
         if (orderHistory.Count == 0) Console.WriteLine("No history found.");
         foreach (var o in orderHistory)
