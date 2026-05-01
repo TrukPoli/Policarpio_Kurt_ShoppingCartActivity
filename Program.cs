@@ -11,7 +11,7 @@ class Product
 
     public void DisplayProduct()
     {
-        string status = RemainingStock == 0 ? "OUT OF STOCK" : $"₱{Price} - Stock: {RemainingStock} [{Category}]";
+        string status = RemainingStock == 0 ? "OUT OF STOCK" : $"₱{Price:F2} - Stock: {RemainingStock} [{Category}]";
         Console.WriteLine($"{Id}. {Name} - {status}");
     }
 
@@ -86,7 +86,7 @@ class Program
             bool found = false;
             foreach (var p in products)
             {
-                if (p.Name.ToLower().Contains(search)) 
+                if (p.Name.ToLower().Contains(search))
                 {
                     p.DisplayProduct();
                     found = true;
@@ -120,10 +120,10 @@ class Program
                 Console.Write("\nAdd another item? (Y/N): ");
                 string repeat = Console.ReadLine().ToUpper();
 
-                if (repeat == "Y") break; 
+                if (repeat == "Y") break;
                 if (repeat == "N")
                 {
-                    isShopping = false; 
+                    isShopping = false;
                     break;
                 }
                 Console.WriteLine("Invalid input. Please enter Y or N only.");
@@ -139,7 +139,7 @@ class Program
         for (int i = 0; i < cart.Count; i++)
         {
             cart[i].UpdateSubtotal();
-            Console.WriteLine($"{i + 1}. {cart[i].Product.Name} x{cart[i].Quantity} - ₱{cart[i].SubTotal}");
+            Console.WriteLine($"{i + 1}. {cart[i].Product.Name} x{cart[i].Quantity} - ₱{cart[i].SubTotal:F2}");
         }
 
         Console.WriteLine("\nOptions: [R]emove Item, [C]lear Cart, [B]ack");
@@ -147,101 +147,99 @@ class Program
 
         if (opt == "R")
         {
-            Console.Write("Enter item number to remove at your cart: ");
-            string input = Console.ReadLine();
-            
-            // Logic updated to provide feedback on invalid input
-            if (int.TryParse(input, out int idx) && idx > 0 && idx <= cart.Count)
+            Console.Write("Enter item number to remove: ");
+            if (int.TryParse(Console.ReadLine(), out int idx) && idx > 0 && idx <= cart.Count)
             {
                 cart[idx - 1].Product.Restock(cart[idx - 1].Quantity);
                 cart.RemoveAt(idx - 1);
-                Console.WriteLine("Item has been removed to your cart and stock returned.");
+                Console.WriteLine("Item removed and stock returned.");
             }
-            else
-            {
-                Console.WriteLine($"\n[Invalid Input]: There's no item number'{input}' in your cart.");
-                Console.WriteLine($"Please choose a number between 1 and {cart.Count}.");
-            }
-            
-            Console.WriteLine("Press any key to continue...");
+            else Console.WriteLine("Invalid selection.");
+
             Console.ReadKey();
         }
         else if (opt == "C")
         {
             foreach (var item in cart) item.Product.Restock(item.Quantity);
             cart.Clear();
-            Console.WriteLine("Cart cleared and all stock returned.");
+            Console.WriteLine("Cart cleared.");
             Console.ReadKey();
         }
     }
 
     static void Checkout(List<CartItem> cart, Product[] products)
     {
-        if (cart.Count == 0) { Console.WriteLine("Cart is empty. Nothing to checkout."); return; }
+        if (cart.Count == 0) { Console.WriteLine("Cart is empty."); return; }
 
         double total = 0;
         foreach (var item in cart) total += item.Product.Price * item.Quantity;
+
         double discount = total > 5000 ? total * 0.10 : 0;
         double finalTotal = total - discount;
 
-        Console.WriteLine($"\nGrand Total: ₱{total}");
-        Console.WriteLine($"Discount (10%): -₱{discount}");
-        Console.WriteLine($"Final Total: ₱{finalTotal}");
+        Console.WriteLine($"\nGrand Total: ₱{total:F2}");
+        Console.WriteLine($"Discount: -₱{discount:F2}");
+        Console.WriteLine($"Final Total: ₱{finalTotal:F2}");
 
         double payment = 0;
         while (payment < finalTotal)
         {
-            Console.Write("Enter payment amount: ");
+            Console.Write("Enter payment: ");
             if (!double.TryParse(Console.ReadLine(), out payment) || payment < finalTotal)
-            {
-                Console.WriteLine("Insufficient payment. Please try again.");
-            }
+                Console.WriteLine("Insufficient payment!: Please try again.");
         }
 
         string rNo = receiptCounter.ToString("D4");
+
         Console.WriteLine("\n========================================");
         Console.WriteLine("           OFFICIAL RECEIPT             ");
         Console.WriteLine($"Receipt No: {rNo}");
-        Console.WriteLine($"Date: {DateTime.Now.ToString("MMMM dd, yyyy h:mm tt")}");
+        Console.WriteLine($"Date: {DateTime.Now:MMMM dd, yyyy h:mm tt}");
         Console.WriteLine("----------------------------------------");
-        foreach (var item in cart) 
-            Console.WriteLine($"{item.Product.Name} x{item.Quantity} = ₱{item.SubTotal}");
-        
+
+        foreach (var item in cart)
+        {
+            double subtotal = item.Product.Price * item.Quantity;
+            Console.WriteLine($"{item.Product.Name} x{item.Quantity} @ ₱{item.Product.Price:F2} = ₱{subtotal:F2}");
+        }
+
         Console.WriteLine("----------------------------------------");
-        Console.WriteLine($"Final Total: ₱{finalTotal}");
-        Console.WriteLine($"Payment:     ₱{payment}");
-        Console.WriteLine($"Change:      ₱{payment - finalTotal}");
+        Console.WriteLine($"Final Total: ₱{finalTotal:F2}");
+        Console.WriteLine($"Payment:     ₱{payment:F2}");
+        Console.WriteLine($"Change:      ₱{(payment - finalTotal):F2}");
         Console.WriteLine("========================================");
 
-        orderHistory.Add(new Order { 
-            ReceiptNumber = rNo, 
-            OrderDate = DateTime.Now, 
-            Items = new List<CartItem>(cart), 
-            FinalTotal = finalTotal 
+        Console.WriteLine("\nThank you for purchasing from our Car Store!");
+        Console.WriteLine("We appreciate your trust and support ");
+        Console.WriteLine("Please come again!\n");
+
+        orderHistory.Add(new Order
+        {
+            ReceiptNumber = rNo,
+            OrderDate = DateTime.Now,
+            Items = new List<CartItem>(cart),
+            FinalTotal = finalTotal
         });
+
         receiptCounter++;
         cart.Clear();
 
         Console.WriteLine("\n--- INVENTORY STATUS ---");
-        bool lowStockFound = false;
         foreach (var p in products)
         {
             if (p.RemainingStock <= 5)
-            {
-                Console.WriteLine($"LOW STOCK ALERT: ID {p.Id} ({p.Name}) has only {p.RemainingStock} left!");
-                lowStockFound = true;
-            }
+                Console.WriteLine($"LOW STOCK ALERT: {p.Name} has only {p.RemainingStock} left!");
         }
-        if (!lowStockFound) Console.WriteLine("All stock levels are healthy.");
     }
 
     static void ViewHistory()
     {
         Console.WriteLine("\n=== COMPLETED TRANSACTIONS ===");
         if (orderHistory.Count == 0) Console.WriteLine("No history found.");
+
         foreach (var o in orderHistory)
         {
-            Console.WriteLine($"Receipt #{o.ReceiptNumber} - {o.OrderDate.ToString("g")} - Total: ₱{o.FinalTotal}");
+            Console.WriteLine($"Receipt #{o.ReceiptNumber} - {o.OrderDate:g} - ₱{o.FinalTotal:F2}");
         }
     }
 }
